@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Passaporte ENEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E3A5C;
+    --navy-ink:#152A44;
+    --mustard:#E3A83C;
+    --mustard-deep:#C88A22;
+    --green:#4F7B4E;
+    --green-deep:#3B5E3A;
+    --terracota:#C25638;
+    --terracota-deep:#A0442A;
+    --brown:#6E4B31;
+    --paper:#F3E9D2;
+    --paper-2:#EBDFC0;
+    --ink:#2B2118;
+    --ink-soft:#5B4C3C;
+    --card-bg:#FBF5E6;
+    --line:rgba(110,75,49,0.28);
+    --shadow:0 6px 18px rgba(43,33,24,0.14);
+    --radius:18px;
+    --font-display:"Fraunces", Georgia, "Times New Roman", serif;
+    --font-body:"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --paper:#182A22;
+      --paper-2:#14231C;
+      --card-bg:#1F3329;
+      --ink:#F3E9D2;
+      --ink-soft:#CBBFA2;
+      --line:rgba(227,168,60,0.28);
+      --shadow:0 8px 22px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#182A22;
+    --paper-2:#14231C;
+    --card-bg:#1F3329;
+    --ink:#F3E9D2;
+    --ink-soft:#CBBFA2;
+    --line:rgba(227,168,60,0.28);
+    --shadow:0 8px 22px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(227,168,60,0.10), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(79,123,78,0.10), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:28px;
+  }
+  ::selection{background:var(--mustard);color:var(--navy-ink);}
+  button{font-family:inherit;}
+  .screen{display:none;flex-direction:column;flex:1;padding:0 20px 20px;animation:fadeIn .35s ease;}
+  .screen.active{display:flex;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){
+    .screen{animation:none;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  h1,h2,h3{font-family:var(--font-display);color:var(--navy);margin:0 0 6px;font-weight:600;}
+  :root[data-theme="dark"] h1, :root[data-theme="dark"] h2, :root[data-theme="dark"] h3{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) h1, :root:not([data-theme="light"]) h2, :root:not([data-theme="light"]) h3{color:var(--mustard);} }
+  p{line-height:1.5;color:var(--ink-soft);margin:0 0 12px;}
+
+  /* ---- Top bar ---- */
+  .topbar{
+    display:flex;align-items:center;gap:10px;
+    padding:18px 20px 10px;
+    position:sticky;top:0;z-index:5;
+    background:linear-gradient(var(--paper) 78%, transparent);
+  }
+  .backbtn{
+    width:38px;height:38px;border-radius:50%;
+    border:1.5px solid var(--line);background:var(--card-bg);
+    color:var(--navy);font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);
+    flex-shrink:0;
+  }
+  :root[data-theme="dark"] .backbtn{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .backbtn{color:var(--mustard);}}
+  .backbtn:active{transform:scale(0.94);}
+  .topbar-title{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--navy);}
+  :root[data-theme="dark"] .topbar-title{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .topbar-title{color:var(--mustard);}}
+
+  /* ---- Buttons (ticket style) ---- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:15px 22px;border-radius:12px;border:none;cursor:pointer;
+    font-family:var(--font-body);font-weight:800;font-size:1rem;letter-spacing:.2px;
+    position:relative;
+    transition:transform .15s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--navy);color:#F6ECD3;box-shadow:0 6px 0 var(--navy-ink);}
+  .btn-primary:active{box-shadow:0 3px 0 var(--navy-ink);transform:translateY(3px);}
+  .btn-primary[disabled]{background:#9c9285;box-shadow:0 6px 0 #7c7469;cursor:not-allowed;opacity:.75;}
+  .btn-primary[disabled]:active{transform:none;}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px dashed var(--brown);}
+  :root[data-theme="dark"] .btn-ghost{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn-ghost{color:var(--mustard);}}
+  .btn-block{width:100%;}
+  .btn-sm{padding:9px 16px;font-size:.85rem;border-radius:9px;}
+
+  /* ---- Splash ---- */
+  #screen-splash{justify-content:center;align-items:center;text-align:center;padding:20px 28px;}
+  .splash-badge{
+    width:96px;height:96px;border-radius:50%;
+    background:var(--card-bg);border:2px solid var(--mustard);
+    display:flex;align-items:center;justify-content:center;font-size:44px;
+    box-shadow:var(--shadow);margin-bottom:22px;
+    animation:pop .6s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .eyebrow-route{
+    font-family:var(--font-display);font-style:italic;color:var(--terracota);
+    font-size:1rem;margin-bottom:2px;
+  }
+  #screen-splash h1{font-size:2.1rem;line-height:1.15;margin-bottom:10px;}
+  .splash-sub{color:var(--ink-soft);max-width:320px;margin:0 auto 30px;}
+  .dotted-divider{
+    width:100%;border:none;border-top:2px dashed var(--line);margin:22px 0;
+  }
+
+  /* ---- Selection screen ---- */
+  .select-counter{
+    font-family:var(--font-display);font-size:1.05rem;color:var(--terracota);margin-bottom:2px;
+  }
+  .exp-grid{display:flex;flex-direction:column;gap:10px;margin:14px 0 18px;overflow-y:auto;}
+  .exp-pick{
+    display:flex;align-items:center;gap:14px;
+    background:var(--card-bg);border:1.5px solid var(--line);border-radius:14px;
+    padding:13px 14px;cursor:pointer;position:relative;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  .exp-pick.chosen{border-color:var(--mustard);border-width:2px;background:linear-gradient(0deg, rgba(227,168,60,.10), rgba(227,168,60,.10)), var(--card-bg);}
+  .exp-pick:active{transform:scale(0.985);}
+  .exp-icon{
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+    background:var(--paper-2);
+  }
+  .exp-text b{display:block;font-size:.98rem;color:var(--ink);}
+  .exp-text span{font-size:.82rem;color:var(--ink-soft);}
+  .exp-check{
+    margin-left:auto;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;
+  }
+  .exp-pick.chosen .exp-check{background:var(--mustard);border-color:var(--mustard);color:var(--navy-ink);}
+
+  /* ---- Home ---- */
+  .home-header{padding:22px 4px 6px;}
+  .home-greet{font-size:1rem;color:var(--ink-soft);margin-bottom:2px;}
+  .home-header h1{font-size:1.7rem;}
+  .stat-row{display:flex;gap:10px;margin:14px 0 18px;}
+  .stat-card{
+    flex:1;background:var(--card-bg);border:1.5px solid var(--line);border-radius:14px;
+    padding:12px 14px;
+  }
+  .stat-card .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);}
+  .stat-card .v{font-family:var(--font-display);font-size:1.15rem;color:var(--navy);margin-top:2px;}
+  :root[data-theme="dark"] .stat-card .v{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stat-card .v{color:var(--mustard);}}
+
+  .home-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .exp-card{
+    display:flex;align-items:center;gap:14px;
+    background:var(--card-bg);border:1.5px solid var(--line);border-radius:16px;
+    padding:14px;cursor:pointer;text-align:left;width:100%;
+    box-shadow:var(--shadow);
+  }
+  .exp-card:active{transform:scale(0.985);}
+  .exp-card .exp-icon{width:48px;height:48px;font-size:22px;}
+  .exp-card .exp-text b{font-size:1.02rem;}
+  .exp-card .arrow{margin-left:auto;color:var(--ink-soft);font-size:1.1rem;}
+  .exp-card .done-dot{width:9px;height:9px;border-radius:50%;background:var(--green);margin-left:6px;flex-shrink:0;}
+
+  .explore-link{
+    margin:14px auto 4px;background:none;border:none;color:var(--ink-soft);
+    font-weight:700;font-size:.92rem;cursor:pointer;padding:10px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .motivo-banner{
+    margin-top:6px;background:var(--paper-2);border-left:3px solid var(--terracota);
+    border-radius:10px;padding:12px 14px;font-family:var(--font-display);font-style:italic;
+    color:var(--ink);font-size:.95rem;
+  }
+
+  /* ---- Generic content card ---- */
+  .card{
+    background:var(--card-bg);border:1.5px solid var(--line);border-radius:16px;
+    padding:16px;margin-bottom:12px;box-shadow:var(--shadow);
+  }
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-weight:800;font-size:.85rem;color:var(--navy);margin-bottom:6px;}
+  :root[data-theme="dark"] .field label{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .field label{color:var(--mustard);}}
+  .field input, .field textarea{
+    width:100%;border:1.5px solid var(--line);border-radius:10px;
+    background:var(--paper);color:var(--ink);padding:11px 12px;font-family:inherit;font-size:.95rem;
+    resize:vertical;
+  }
+  .field textarea{min-height:70px;}
+  .field input:focus, .field textarea:focus{outline:2px solid var(--mustard);outline-offset:1px;}
+
+  /* Passport-style letter */
+  .travel-letter{
+    background:var(--paper-2);border:1.5px dashed var(--brown);border-radius:14px;
+    padding:18px;margin-top:6px;
+  }
+  .travel-letter .stamp-mark{float:right;font-size:34px;transform:rotate(8deg);opacity:.85;}
+  .travel-letter h3{font-size:1.15rem;margin-bottom:12px;}
+  .travel-letter dl{margin:0;}
+  .travel-letter dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);margin-top:10px;}
+  .travel-letter dd{margin:2px 0 0;font-family:var(--font-display);font-size:1.05rem;color:var(--ink);}
+
+  /* Area / block chips (Estação ENEM) */
+  .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+  .area-chip{
+    background:var(--card-bg);border:1.5px solid var(--line);border-radius:16px;
+    padding:20px 12px;text-align:center;cursor:pointer;box-shadow:var(--shadow);
+  }
+  .area-chip:active{transform:scale(.97);}
+  .area-chip .sq{font-size:26px;display:block;margin-bottom:8px;}
+  .area-chip b{font-size:.92rem;}
+  .block-list{display:flex;flex-direction:column;gap:12px;margin-top:10px;}
+  .block-row{
+    display:flex;align-items:center;gap:14px;background:var(--card-bg);
+    border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;box-shadow:var(--shadow);
+  }
+  .block-row .sq{font-size:20px;}
+  .block-row b{display:block;font-size:.98rem;}
+  .block-row span{font-size:.8rem;color:var(--ink-soft);}
+  .block-row .best{margin-left:auto;font-family:var(--font-display);color:var(--green);font-weight:600;}
+
+  /* Quiz */
+  .quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .quiz-progress{font-weight:800;color:var(--navy);}
+  :root[data-theme="dark"] .quiz-progress{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .quiz-progress{color:var(--mustard);}}
+  .quiz-timer{font-family:var(--font-display);color:var(--terracota);font-weight:600;}
+  .quiz-q{font-size:1.08rem;font-weight:700;color:var(--ink);margin-bottom:16px;}
+  .opt{
+    display:block;width:100%;text-align:left;background:var(--card-bg);border:1.5px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-size:.95rem;color:var(--ink);
+  }
+  .opt b{color:var(--terracota);margin-right:8px;}
+  .opt.correct{border-color:var(--green);background:rgba(79,123,78,0.14);}
+  .opt.wrong{border-color:var(--terracota);background:rgba(194,86,56,0.14);}
+  .opt[disabled]{cursor:default;}
+
+  .result-ring{
+    width:150px;height:150px;border-radius:50%;margin:10px auto 18px;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:conic-gradient(var(--green) calc(var(--pct)*1%), var(--paper-2) 0);
+    position:relative;
+  }
+  .result-ring::before{
+    content:"";position:absolute;inset:10px;border-radius:50%;background:var(--paper);
+  }
+  .result-ring .rv{position:relative;font-family:var(--font-display);font-size:2rem;color:var(--navy);}
+  :root[data-theme="dark"] .result-ring .rv{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .result-ring .rv{color:var(--mustard);}}
+  .result-ring .rl{position:relative;font-size:.75rem;color:var(--ink-soft);}
+  .result-meta{display:flex;justify-content:center;gap:22px;margin-bottom:16px;color:var(--ink-soft);font-size:.9rem;}
+
+  /* Bagagem / suitcase */
+  .suitcase{
+    background:linear-gradient(180deg, var(--brown), #543a24);
+    border-radius:20px;padding:22px 16px 26px;margin:6px 0 18px;position:relative;box-shadow:var(--shadow);
+  }
+  .suitcase::before{
+    content:"";position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+    width:70px;height:22px;border:5px solid #543a24;border-bottom:none;border-radius:12px 12px 0 0;
+  }
+  .suitcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .bag-item{
+    background:var(--paper);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;
+    border:1.5px solid transparent;
+  }
+  .bag-item.seen{border-color:var(--mustard);}
+  .bag-item .ic{font-size:22px;display:block;margin-bottom:6px;}
+  .bag-item b{font-size:.82rem;color:var(--ink);}
+
+  .tip-box{background:var(--paper-2);border-radius:12px;padding:14px;margin-top:4px;border-left:4px solid var(--mustard);}
+
+  /* Checklist */
+  .check-row{
+    display:flex;align-items:center;gap:12px;background:var(--card-bg);border:1.5px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:9px;cursor:pointer;
+  }
+  .check-row .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--brown);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;}
+  .check-row.on .box{background:var(--green);border-color:var(--green);color:#fff;}
+  .check-row.on span{text-decoration:line-through;color:var(--ink-soft);}
+  .warn-box{
+    background:rgba(194,86,56,0.12);border:1.5px solid var(--terracota);border-radius:12px;
+    padding:13px 14px;margin-top:8px;font-size:.88rem;
+  }
+  .warn-box b{color:var(--terracota-deep);}
+
+  /* Estrategia cards */
+  .strat-card{
+    background:var(--card-bg);border:1.5px solid var(--line);border-radius:14px;padding:15px;
+    margin-bottom:10px;cursor:pointer;
+  }
+  .strat-card b{display:flex;align-items:center;gap:8px;font-size:.98rem;color:var(--navy);}
+  :root[data-theme="dark"] .strat-card b{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .strat-card b{color:var(--mustard);}}
+  .strat-card .txt{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .strat-card.open .txt{max-height:120px;margin-top:8px;}
+
+  /* Respiracao */
+  .breath-wrap{display:flex;flex-direction:column;align-items:center;padding:18px 0;}
+  .breath-circle{
+    width:180px;height:180px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35), transparent 60%), var(--green);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-family:var(--font-display);font-size:1.2rem;text-align:center;
+    transition:transform 4s ease-in-out;
+    box-shadow:0 0 0 10px rgba(79,123,78,0.15);
+  }
+  .breath-circle.in{transform:scale(1.25);}
+  .breath-circle.hold{transform:scale(1.25);}
+  .breath-circle.out{transform:scale(0.85);}
+  .breath-durations{display:flex;gap:10px;margin-top:26px;width:100%;}
+  .dur-btn{
+    flex:1;background:var(--card-bg);border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 6px;text-align:center;cursor:pointer;font-weight:700;
+  }
+  .dur-btn.active{border-color:var(--green);border-width:2px;}
+  .breath-timer{font-family:var(--font-display);font-size:1.4rem;color:var(--navy);margin-top:16px;}
+  :root[data-theme="dark"] .breath-timer{color:var(--mustard);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .breath-timer{color:var(--mustard);}}
+
+  /* Caminho timeline */
+  .timeline{margin-top:8px;}
+  .tl-item{display:flex;gap:14px;padding-bottom:20px;position:relative;}
+  .tl-item::before{
+    content:"";position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--line);
+  }
+  .tl-item:last-child::before{display:none;}
+  .tl-dot{
+    width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    font-size:15px;background:var(--paper-2);border:1.5px solid var(--line);z-index:1;
+  }
+  .tl-dot.done{background:var(--green);border-color:var(--green);color:#fff;}
+  .tl-body b{display:block;font-size:.96rem;}
+  .tl-body span{font-size:.83rem;color:var(--ink-soft);}
+
+  /* Passaporte stamps */
+  .passport-page{
+    background:var(--paper-2);border:1.5px solid var(--line);border-radius:16px;padding:18px;margin-top:6px;
+  }
+  .stamp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .stamp{
+    aspect-ratio:1;border-radius:50%;border:3px dashed var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;
+    opacity:.4;
+  }
+  .stamp.got{
+    opacity:1;border-style:solid;border-color:var(--terracota);color:var(--terracota-deep);
+    transform:rotate(-6deg);
+    background:rgba(194,86,56,0.06);
+  }
+  .stamp .ic{font-size:22px;}
+  .stamp b{font-size:.7rem;margin-top:4px;line-height:1.15;}
+
+  /* Futuro */
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;}
+  .area-tag{
+    background:var(--paper-2);border:1px solid var(--line);border-radius:20px;
+    padding:7px 14px;font-size:.85rem;color:var(--ink);
+  }
+
+  .empty-note{color:var(--ink-soft);font-size:.9rem;text-align:center;padding:20px 0;}
+  .section-lead{font-size:.9rem;color:var(--ink-soft);margin-bottom:14px;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- SPLASH -->
+  <section class="screen active" id="screen-splash">
+    <div class="splash-badge">🧭</div>
+    <div class="eyebrow-route">Um sonho. Um caminho. Mil possibilidades.</div>
+    <h1>Passaporte ENEM</h1>
+    <p class="splash-sub">Sua jornada começa aqui. Descubra seus objetivos, teste seus conhecimentos, prepare sua bagagem e encontre estratégias para chegar mais preparado ao ENEM.</p>
+    <button class="btn btn-primary btn-block" style="max-width:280px" onclick="goToSelect()">Começar jornada</button>
+  </section>
+
+  <!-- SELECT 5 -->
+  <section class="screen" id="screen-select" style="padding-top:20px;">
+    <div class="select-counter" id="select-counter">Escolha 5 experiências</div>
+    <h2 style="margin-bottom:4px;">Monte sua jornada</h2>
+    <p class="section-lead">Você poderá acessar as demais quando quiser.</p>
+    <div class="exp-grid" id="select-grid"></div>
+    <button class="btn btn-primary btn-block" id="continue-btn" disabled onclick="finishSelection()">Continuar</button>
+  </section>
+
+  <!-- HOME -->
+  <section class="screen" id="screen-home">
+    <div class="home-header">
+      <div class="home-greet">Olá! 👋</div>
+      <h1 id="home-title">Sua jornada começa com um passo.</h1>
+      <div class="stat-row">
+        <div class="stat-card"><div class="k">Seu objetivo</div><div class="v" id="home-objetivo">A definir</div></div>
+        <div class="stat-card"><div class="k">Sua jornada</div><div class="v" id="home-progress">0 experiências</div></div>
+      </div>
+    </div>
+    <div class="home-list" id="home-list"></div>
+    <button class="explore-link" onclick="showScreen('screen-explore')">＋ Explorar outras experiências</button>
+    <div class="motivo-banner" id="motivo-banner" style="display:none;"></div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section class="screen" id="screen-explore">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">Explorar experiências</div>
+    </div>
+    <p class="section-lead">Todas as experiências disponíveis, com ou sem seleção na sua tela inicial.</p>
+    <div class="exp-grid" id="explore-grid"></div>
+    <button class="btn btn-ghost btn-block" onclick="goToSelect(true)">Editar minhas 5 experiências</button>
+  </section>
+
+  <!-- SONHO -->
+  <section class="screen" id="screen-sonho">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">🎯 Meu Sonho</div>
+    </div>
+    <p class="section-lead">Defina seu objetivo e o que deseja alcançar.</p>
+    <div class="card">
+      <div class="field"><label>Meu sonho</label><input id="sonho-sonho" type="text" placeholder="Ex: Medicina" maxlength="60"></div>
+      <div class="field"><label>Meu futuro</label><textarea id="sonho-futuro" placeholder="Ex: Quero trabalhar na área da saúde." maxlength="200"></textarea></div>
+      <div class="field"><label>Eu vou porque...</label><textarea id="sonho-motivo" placeholder="Ex: Quero ajudar pessoas." maxlength="200"></textarea></div>
+      <button class="btn btn-primary btn-block" onclick="saveSonho()">Salvar meu sonho</button>
+    </div>
+    <div id="sonho-letter"></div>
+  </section>
+
+  <!-- ESTACAO ENEM -->
+  <section class="screen" id="screen-estacao">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="estacaoBack()">←</button>
+      <div class="topbar-title" id="estacao-title">🧠 Estação ENEM</div>
+    </div>
+    <div id="estacao-body"></div>
+  </section>
+
+  <!-- BAGAGEM -->
+  <section class="screen" id="screen-bagagem">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">🧳 Minha Bagagem</div>
+    </div>
+    <p class="section-lead">Toque em cada item da mala para descobrir o que levar na sua preparação.</p>
+    <div class="suitcase"><div class="suitcase-grid" id="bagagem-grid"></div></div>
+    <div id="bagagem-tip"></div>
+  </section>
+
+  <!-- ESTRATEGIA -->
+  <section class="screen" id="screen-estrategia">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">💡 Estratégia ENEM</div>
+    </div>
+    <p class="section-lead">Pequenas dicas para o dia da prova. Toque para abrir cada uma.</p>
+    <div id="estrategia-list"></div>
+  </section>
+
+  <!-- RESPIRACAO -->
+  <section class="screen" id="screen-respiracao">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">😮‍💨 Respiração</div>
+    </div>
+    <p class="section-lead">Respire. Você tem tempo. Antes de começar, faça uma pausa de alguns segundos.</p>
+    <div class="breath-wrap">
+      <div class="breath-circle" id="breath-circle">Pronto?</div>
+      <div class="breath-timer" id="breath-timer" style="display:none;"></div>
+      <div class="breath-durations" id="breath-durations">
+        <div class="dur-btn" data-s="30" onclick="startBreathing(30)">🌿 30s</div>
+        <div class="dur-btn" data-s="60" onclick="startBreathing(60)">🌿 1 min</div>
+        <div class="dur-btn" data-s="120" onclick="startBreathing(120)">🌿 2 min</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="screen" id="screen-checklist">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">📋 O Que Levar</div>
+    </div>
+    <h3 style="font-size:1rem;">🎒 Antes de sair</h3>
+    <div id="checklist-list"></div>
+    <div class="warn-box"><b>⚠️ Atenção:</b> confira as orientações oficiais do ENEM antes da prova, pois regras e procedimentos devem ser verificados para a edição correspondente.</div>
+  </section>
+
+  <!-- CAMINHO -->
+  <section class="screen" id="screen-caminho">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">🛤️ Meu Caminho</div>
+    </div>
+    <p class="section-lead">O registro visual da sua jornada até aqui.</p>
+    <div class="timeline" id="caminho-list"></div>
+  </section>
+
+  <!-- PASSAPORTE -->
+  <section class="screen" id="screen-passaporte">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">🛂 Meu Passaporte</div>
+    </div>
+    <p class="section-lead">Cada experiência realizada ganha um carimbo digital.</p>
+    <div class="passport-page"><div class="stamp-grid" id="passport-grid"></div></div>
+  </section>
+
+  <!-- MOTIVO -->
+  <section class="screen" id="screen-motivo">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">❤️ Meu Motivo</div>
+    </div>
+    <p class="section-lead">Registre aquilo que faz você continuar buscando seu objetivo.</p>
+    <div class="card">
+      <div class="field"><label>Eu vou porque...</label><textarea id="motivo-text" placeholder="Ex: Quero conquistar minha vaga e construir meu futuro." maxlength="220"></textarea></div>
+      <button class="btn btn-primary btn-block" onclick="saveMotivo()">Salvar meu motivo</button>
+    </div>
+  </section>
+
+  <!-- FUTURO -->
+  <section class="screen" id="screen-futuro">
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <button class="backbtn" onclick="showScreen('screen-home')">←</button>
+      <div class="topbar-title">🔮 Meu Futuro</div>
+    </div>
+    <p class="section-lead">Explore possibilidades relacionadas ao seu curso.</p>
+    <div class="card">
+      <div class="field">
+        <label>Meu curso</label>
+        <input id="futuro-curso" type="text" list="cursos-list" placeholder="Ex: Administração" oninput="renderFuturoAreas()">
+        <datalist id="cursos-list"></datalist>
+      </div>
+    </div>
+    <div id="futuro-result"></div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- DATA ---------------- */
+  var EXPERIENCES = [
+    {id:'sonho', icon:'🎯', title:'Meu Sonho', subtitle:'Defina seu objetivo'},
+    {id:'estacao', icon:'🧠', title:'Estação ENEM', subtitle:'Teste seus conhecimentos'},
+    {id:'bagagem', icon:'🧳', title:'Minha Bagagem', subtitle:'Prepare-se para a prova'},
+    {id:'estrategia', icon:'💡', title:'Estratégia ENEM', subtitle:'Dicas para o dia da prova'},
+    {id:'respiracao', icon:'😮\u200d💨', title:'Respiração', subtitle:'Encontre seu ritmo'},
+    {id:'checklist', icon:'📋', title:'O Que Levar', subtitle:'Checklist do grande dia'},
+    {id:'caminho', icon:'🛤️', title:'Meu Caminho', subtitle:'Veja sua jornada'},
+    {id:'passaporte', icon:'🛂', title:'Meu Passaporte', subtitle:'Seus carimbos de viagem'},
+    {id:'motivo', icon:'❤️', title:'Meu Motivo', subtitle:'O que te move'},
+    {id:'futuro', icon:'🔮', title:'Meu Futuro', subtitle:'Possibilidades do seu curso'}
+  ];
+  function expById(id){ for(var i=0;i<EXPERIENCES.length;i++){ if(EXPERIENCES[i].id===id) return EXPERIENCES[i]; } return null; }
+
+  var AREAS = [
+    {id:'linguagens', label:'Linguagens', sq:'🟨'},
+    {id:'humanas', label:'Ciências Humanas', sq:'🟦'},
+    {id:'natureza', label:'Ciências da Natureza', sq:'🟩'},
+    {id:'matematica', label:'Matemática', sq:'🟥'}
+  ];
+  var BLOCKS = [
+    {id:'base', label:'Base', sq:'🟢'},
+    {id:'intermediario', label:'Intermediário', sq:'🟡'},
+    {id:'desafio', label:'Desafio', sq:'🔴'}
+  ];
+
+  function Q(q,opts,correct){ return {q:q,opts:opts,correct:correct}; }
+  var QUIZ_BANK = {
+    linguagens:{
+      base:[
+        Q("Qual das palavras abaixo é um sinônimo de 'alegre'?",["triste","contente","cansado","irritado"],1),
+        Q("Em 'O menino comeu rapidamente o bolo', a palavra 'rapidamente' classifica-se como:",["substantivo","adjetivo","advérbio","pronome"],2),
+        Q("Assinale a frase que está na voz passiva:",["Maria escreveu a carta.","A carta foi escrita por Maria.","Maria escreve cartas.","Maria vai escrever a carta."],1)
+      ],
+      intermediario:[
+        Q("Qual figura de linguagem está presente em 'Meus olhos são dois oceanos de tristeza'?",["metáfora","metonímia","hipérbole","ironia"],0),
+        Q("No trecho 'Se eu pudesse, mudaria o mundo', o verbo 'pudesse' está no:",["presente do indicativo","pretérito imperfeito do subjuntivo","futuro do subjuntivo","imperativo"],1),
+        Q("A função da vírgula em 'Comprei pão, leite e ovos' é:",["separar orações","separar itens de uma enumeração","isolar um vocativo","indicar uma pausa dramática"],1)
+      ],
+      desafio:[
+        Q("Em um texto argumentativo, a tese é:",["o exemplo usado para ilustrar um argumento","a ideia central que o autor defende","a conclusão repetida da introdução","uma citação de outro autor"],1),
+        Q("O uso da ironia em um texto geralmente tem como objetivo:",["reforçar literalmente o que é dito","esclarecer dados estatísticos","criticar por meio do contraste entre o dito e o pretendido","definir um conceito técnico"],2),
+        Q("Uma tese bem construída em uma redação dissertativa deve ser:",["vaga e genérica","clara e sustentável por argumentos","apenas uma pergunta retórica","idêntica à conclusão"],1)
+      ]
+    },
+    humanas:{
+      base:[
+        Q("O regime político em que o poder é exercido pelo povo, direta ou indiretamente, chama-se:",["monarquia","democracia","oligarquia","teocracia"],1),
+        Q("A Revolução Industrial teve início, de forma pioneira, em qual país?",["França","Inglaterra","Alemanha","Estados Unidos"],1),
+        Q("O processo de urbanização é caracterizado por:",["aumento da população rural","crescimento das cidades em relação ao campo","diminuição da população total","isolamento entre regiões"],1)
+      ],
+      intermediario:[
+        Q("O Iluminismo, movimento do século XVIII, defendia principalmente:",["o poder absoluto dos reis","a razão e a ciência como caminhos para o progresso","o retorno aos valores medievais","a supremacia da Igreja sobre o Estado"],1),
+        Q("A Guerra Fria foi marcada pela disputa entre:",["Alemanha e França","Estados Unidos e União Soviética","Inglaterra e Espanha","China e Japão"],1),
+        Q("O conceito de 'globalização' está mais relacionado a:",["isolamento de mercados nacionais","integração econômica, cultural e política entre países","fim do comércio internacional","fortalecimento exclusivo das economias locais"],1)
+      ],
+      desafio:[
+        Q("A desigualdade social no Brasil tem raízes históricas associadas, entre outros fatores, a:",["distribuição igualitária de terras desde a colonização","herança da escravidão e concentração fundiária","ausência total de imigração","política econômica exclusivamente socialista"],1),
+        Q("O conceito de 'cidadania' está diretamente ligado a:",["direitos e deveres do indivíduo em relação ao Estado","apenas ao direito de propriedade","exclusivamente a obrigações fiscais","ausência de participação política"],0),
+        Q("Um dos principais desafios ambientais discutidos globalmente atualmente é:",["o excesso de áreas de preservação","as mudanças climáticas causadas pela ação humana","a escassez de tecnologia","o crescimento populacional negativo"],1)
+      ]
+    },
+    natureza:{
+      base:[
+        Q("A unidade básica da vida é:",["o átomo","a célula","o tecido","o órgão"],1),
+        Q("A água é composta por quais elementos químicos?",["hidrogênio e oxigênio","carbono e oxigênio","nitrogênio e hidrogênio","oxigênio e nitrogênio"],0),
+        Q("A força que atrai os objetos em direção ao centro da Terra é chamada de:",["força elétrica","força gravitacional","força magnética","força nuclear"],1)
+      ],
+      intermediario:[
+        Q("O processo pelo qual as plantas produzem seu próprio alimento usando luz solar é:",["respiração","fotossíntese","fermentação","digestão"],1),
+        Q("A primeira lei de Newton descreve o princípio da:",["ação e reação","inércia","gravitação universal","conservação de energia"],1),
+        Q("O pH de uma solução ácida é:",["maior que 7","igual a 7","menor que 7","sempre negativo"],2)
+      ],
+      desafio:[
+        Q("O efeito estufa, em excesso, está relacionado principalmente ao aumento de:",["oxigênio na atmosfera","gases como o dióxido de carbono na atmosfera","vapor de água nos oceanos","nitrogênio no solo"],1),
+        Q("Em genética, o conjunto de genes de um organismo é chamado de:",["fenótipo","genótipo","cariótipo","ecótipo"],1),
+        Q("A energia cinética de um corpo depende principalmente de:",["apenas de sua massa","apenas de sua altura","de sua massa e de sua velocidade","apenas de sua cor"],2)
+      ]
+    },
+    matematica:{
+      base:[
+        Q("Quanto é 15% de 200?",["20","30","15","45"],1),
+        Q("Qual é o resultado de 7 × 8?",["54","56","64","48"],1),
+        Q("Se um retângulo tem lados 4 cm e 6 cm, qual é sua área?",["10 cm²","20 cm²","24 cm²","12 cm²"],2)
+      ],
+      intermediario:[
+        Q("Qual é a raiz quadrada de 144?",["11","12","13","14"],1),
+        Q("Em uma proporção direta, se 3 itens custam R$ 12, quanto custam 5 itens?",["R$ 15","R$ 18","R$ 20","R$ 24"],2),
+        Q("O valor de x na equação 2x + 4 = 12 é:",["2","4","6","8"],1)
+      ],
+      desafio:[
+        Q("Uma progressão aritmética começa em 3 e tem razão 5. Qual é o quinto termo?",["18","23","20","15"],1),
+        Q("A probabilidade de tirar um número par ao lançar um dado comum de 6 faces é:",["1/6","1/3","1/2","2/3"],2),
+        Q("Se a função f(x) = 2x² - 3x + 1, qual é o valor de f(2)?",["3","5","7","9"],0)
+      ]
+    }
+  };
+
+  var BAGAGEM_ITEMS = [
+    {id:'conhecimento', ic:'📚', label:'Conhecimento', tip:"Revise os conteúdos que você já estudou. Não é hora de aprender tudo, e sim de organizar o que você sabe."},
+    {id:'estrategia', ic:'🧠', label:'Estratégia', tip:"Leia a prova inteira antes de começar e responda primeiro as questões que você domina."},
+    {id:'tempo', ic:'⏰', label:'Tempo', tip:"Durante a prova, acompanhe o relógio e evite permanecer tempo demais em uma única questão."},
+    {id:'foco', ic:'🎯', label:'Foco', tip:"Leia o comando da questão com atenção antes de analisar as alternativas."},
+    {id:'descanso', ic:'😴', label:'Descanso', tip:"Durma bem na noite anterior. Uma mente descansada pensa com mais clareza."},
+    {id:'motivacao', ic:'❤️', label:'Motivação', tip:"Lembre-se do motivo que te trouxe até aqui. Ele é o combustível da sua jornada."},
+    {id:'apoio', ic:'🤝', label:'Apoio', tip:"Você não está sozinho. Conte com familiares, amigos e professores nessa caminhada."}
+  ];
+
+  var STRATEGY_TOPICS = [
+    {id:'tempo', ic:'⏱️', label:'Tempo', tip:"Divida o tempo disponível entre as questões e reserve os últimos minutos para revisar o cartão de respostas."},
+    {id:'interpretacao', ic:'📖', label:'Interpretação', tip:"Leia o texto e o comando da questão mais de uma vez antes de escolher uma alternativa."},
+    {id:'questoes', ic:'📝', label:'Questões', tip:"Ao encontrar uma questão difícil, marque-a e volte depois de responder as mais simples."},
+    {id:'concentracao', ic:'🧠', label:'Concentração', tip:"Faça pequenas pausas conscientes para respirar e manter o foco ao longo da prova."},
+    {id:'chute', ic:'🎯', label:'Chute consciente', tip:"Elimine as alternativas claramente erradas antes de escolher entre as que restarem."}
+  ];
+
+  var CHECKLIST_ITEMS = [
+    {id:'doc', label:'Documento de identificação'},
+    {id:'caneta', label:'Caneta esferográfica preta de material transparente'},
+    {id:'cartao', label:'Cartão de confirmação, se necessário'},
+    {id:'agua', label:'Água'},
+    {id:'lanche', label:'Lanche, se desejar'}
+  ];
+
+  var FUTURE_MAP = {
+    "medicina":["Clínica Geral","Pesquisa","Saúde Pública","Cirurgia"],
+    "engenharia":["Construção Civil","Indústria","Tecnologia","Meio Ambiente"],
+    "direito":["Advocacia","Magistratura","Direito Público","Consultoria"],
+    "administração":["Gestão","Finanças","Marketing","Recursos Humanos"],
+    "psicologia":["Clínica","Organizacional","Educacional","Pesquisa"],
+    "arquitetura":["Urbanismo","Design de Interiores","Construção","Restauro"],
+    "ciência da computação":["Desenvolvimento de Software","Dados","Segurança","Inteligência Artificial"],
+    "pedagogia":["Educação Infantil","Gestão Escolar","Educação Especial","Formação de Professores"]
+  };
+
+  /* ---------------- STATE ---------------- */
+  var DEFAULT_STATE = {
+    onboarded:false,
+    selected:[],
+    sonho:null,
+    motivo:null,
+    quiz:{},
+    bagagemSeen:[],
+    estrategiaSeen:[],
+    checklist:{},
+    respiracaoCount:0,
+    futuroCurso:""
+  };
+  var state = loadState();
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem('passaporte-enem-state');
+      if(!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+      var parsed = JSON.parse(raw);
+      var merged = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      for(var k in parsed){ merged[k] = parsed[k]; }
+      return merged;
+    }catch(e){
+      return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+  }
+  function saveState(){
+    try{ localStorage.setItem('passaporte-enem-state', JSON.stringify(state)); }catch(e){ /* ignore */ }
+  }
+
+  /* ---------------- NAV ---------------- */
+  function showScreen(id){
+    var screens = document.querySelectorAll('.screen');
+    for(var i=0;i<screens.length;i++){ screens[i].classList.remove('active'); }
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+    if(id==='screen-home') renderHome();
+    if(id==='screen-explore') renderExplore();
+    if(id==='screen-caminho') renderCaminho();
+    if(id==='screen-passaporte') renderPassaporte();
+    if(id==='screen-bagagem') renderBagagem();
+    if(id==='screen-estrategia') renderEstrategia();
+    if(id==='screen-checklist') renderChecklist();
+    if(id==='screen-sonho') renderSonhoScreen();
+    if(id==='screen-motivo') renderMotivoScreen();
+    if(id==='screen-futuro') renderFuturoScreen();
+  }
+  window.showScreen = showScreen;
+
+  function goToSelect(editing){
+    document.getElementById('select-counter').textContent = 'Escolha 5 experiências';
+    renderSelectGrid();
+    showScreen('screen-select');
+  }
+  window.goToSelect = goToSelect;
+
+  /* ---------------- SELECTION ---------------- */
+  function renderSelectGrid(){
+    var grid = document.getElementById('select-grid');
+    grid.innerHTML = '';
+    EXPERIENCES.forEach(function(exp){
+      var chosen = state.selected.indexOf(exp.id) > -1;
+      var div = document.createElement('div');
+      div.className = 'exp-pick' + (chosen ? ' chosen' : '');
+      div.innerHTML = '<div class="exp-icon">'+exp.icon+'</div>'+
+        '<div class="exp-text"><b>'+exp.title+'</b><span>'+exp.subtitle+'</span></div>'+
+        '<div class="exp-check">✓</div>';
+      div.onclick = function(expId){
+        return function(){ toggleSelect(expId); };
+      }(exp.id);
+      grid.appendChild(div);
+    });
+    updateSelectCounter();
+  }
+  function toggleSelect(id){
+    var idx = state.selected.indexOf(id);
+    if(idx>-1){ state.selected.splice(idx,1); }
+    else{
+      if(state.selected.length>=5) return;
+      state.selected.push(id);
+    }
+    renderSelectGrid();
+  }
+  function updateSelectCounter(){
+    var n = state.selected.length;
+    document.getElementById('select-counter').textContent = n+' de 5 selecionadas';
+    document.getElementById('continue-btn').disabled = (n!==5);
+  }
+  function finishSelection(){
+    if(state.selected.length!==5) return;
+    state.onboarded = true;
+    saveState();
+    showScreen('screen-home');
+  }
+  window.finishSelection = finishSelection;
+
+  /* ---------------- HOME ---------------- */
+  function isDone(id){
+    switch(id){
+      case 'sonho': return !!state.sonho;
+      case 'estacao':
+        for(var a in state.quiz){ for(var b in state.quiz[a]){ return true; } }
+        return false;
+      case 'bagagem': return state.bagagemSeen.length>0;
+      case 'estrategia': return state.estrategiaSeen.length>0;
+      case 'respiracao': return state.respiracaoCount>0;
+      case 'checklist':
+        for(var k in state.checklist){ if(state.checklist[k]) return true; }
+        return false;
+      case 'motivo': return !!state.motivo;
+      case 'futuro': return !!state.futuroCurso;
+      case 'caminho': return false;
+      case 'passaporte': return false;
+      default: return false;
+    }
+  }
+  function countDone(){
+    var c = 0;
+    EXPERIENCES.forEach(function(e){ if(isDone(e.id)) c++; });
+    return c;
+  }
+
+  function renderHome(){
+    document.getElementById('home-title').textContent = state.sonho ? 'Sua jornada continua.' : 'Sua jornada começa com um passo.';
+    document.getElementById('home-objetivo').textContent = state.sonho && state.sonho.sonho ? state.sonho.sonho : 'A definir';
+    var n = countDone();
+    document.getElementById('home-progress').textContent = n + (n===1 ? ' experiência' : ' experiências');
+    var list = document.getElementById('home-list');
+    list.innerHTML = '';
+    state.selected.forEach(function(id){
+      var exp = expById(id);
+      if(!exp) return;
+      var div = document.createElement('button');
+      div.className = 'exp-card';
+      div.innerHTML = '<div class="exp-icon">'+exp.icon+'</div>'+
+        '<div class="exp-text"><b>'+exp.title+'</b><span>'+exp.subtitle+'</span></div>'+
+        (isDone(id) ? '<div class="done-dot"></div>' : '') +
+        '<div class="arrow">›</div>';
+      div.onclick = function(expId){ return function(){ showScreen('screen-'+expId); }; }(id);
+      list.appendChild(div);
+    });
+    var banner = document.getElementById('motivo-banner');
+    if(state.motivo){
+      banner.style.display = 'block';
+      banner.innerHTML = '❤️ Lembre-se do seu motivo: “'+escapeHtml(state.motivo)+'”';
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  function renderExplore(){
+    var grid = document.getElementById('explore-grid');
+    grid.innerHTML = '';
+    EXPERIENCES.forEach(function(exp){
+      var inHome = state.selected.indexOf(exp.id) > -1;
+      var div = document.createElement('button');
+      div.className = 'exp-card';
+      div.style.textAlign='left';
+      div.innerHTML = '<div class="exp-icon">'+exp.icon+'</div>'+
+        '<div class="exp-text"><b>'+exp.title+'</b><span>'+(inHome ? 'Já está na sua tela inicial' : exp.subtitle)+'</span></div>'+
+        (isDone(exp.id) ? '<div class="done-dot"></div>' : '') +
+        '<div class="arrow">›</div>';
+      div.onclick = function(expId){ return function(){ showScreen('screen-'+expId); }; }(exp.id);
+      grid.appendChild(div);
+    });
+  }
+
+  /* ---------------- SONHO ---------------- */
+  function renderSonhoScreen(){
+    document.getElementById('sonho-sonho').value = state.sonho ? state.sonho.sonho : '';
+    document.getElementById('sonho-futuro').value = state.sonho ? state.sonho.futuro : '';
+    document.getElementById('sonho-motivo').value = state.sonho ? state.sonho.motivo : '';
+    renderSonhoLetter();
+  }
+  function saveSonho(){
+    var sonho = document.getElementById('sonho-sonho').value.trim();
+    var futuro = document.getElementById('sonho-futuro').value.trim();
+    var motivo = document.getElementById('sonho-motivo').value.trim();
+    if(!sonho){ document.getElementById('sonho-sonho').focus(); return; }
+    state.sonho = {sonho:sonho, futuro:futuro, motivo:motivo};
+    saveState();
+    renderSonhoLetter();
+  }
+  window.saveSonho = saveSonho;
+  function renderSonhoLetter(){
+    var box = document.getElementById('sonho-letter');
+    if(!state.sonho){ box.innerHTML=''; return; }
+    box.innerHTML = '<div class="travel-letter">'+
+      '<div class="stamp-mark">🎫</div>'+
+      '<h3>Carta de viagem</h3>'+
+      '<dl>'+
+      '<dt>Meu sonho</dt><dd>'+escapeHtml(state.sonho.sonho)+'</dd>'+
+      (state.sonho.futuro ? '<dt>Meu futuro</dt><dd>'+escapeHtml(state.sonho.futuro)+'</dd>' : '')+
+      (state.sonho.motivo ? '<dt>Eu vou porque</dt><dd>'+escapeHtml(state.sonho.motivo)+'</dd>' : '')+
+      '</dl></div>';
+  }
+
+  /* ---------------- MOTIVO ---------------- */
+  function renderMotivoScreen(){
+    document.getElementById('motivo-text').value = state.motivo || '';
+  }
+  function saveMotivo(){
+    var v = document.getElementById('motivo-text').value.trim();
+    if(!v) return;
+    state.motivo = v;
+    saveState();
+    showScreen('screen-home');
+  }
+  window.saveMotivo = saveMotivo;
+
+  /* ---------------- ESTACAO ENEM ---------------- */
+  var estacao = {view:'area', area:null, block:null, qIndex:0, answers:[], startTime:0, timerHandle:null, elapsed:0};
+
+  function estacaoBack(){
+    if(estacao.view==='area'){ showScreen('screen-home'); return; }
+    if(estacao.view==='block'){ estacao.view='area'; renderEstacao(); return; }
+    if(estacao.view==='quiz' || estacao.view==='result'){ estacao.view='block'; stopQuizTimer(); renderEstacao(); return; }
+  }
+  window.estacaoBack = estacaoBack;
+
+  function openEstacao(){
+    estacao.view='area';
+    renderEstacao();
+  }
+
+  function renderEstacao(){
+    var body = document.getElementById('estacao-body');
+    var title = document.getElementById('estacao-title');
+    if(estacao.view==='area'){
+      title.textContent = '🧠 Estação ENEM';
+      var html = '<p class="section-lead">Escolha uma área para testar seus conhecimentos.</p><div class="area-grid">';
+      AREAS.forEach(function(a){
+        html += '<div class="area-chip" onclick="pickArea(\''+a.id+'\')"><span class="sq">'+a.sq+'</span><b>'+a.label+'</b></div>';
+      });
+      html += '</div>';
+      body.innerHTML = html;
+    } else if(estacao.view==='block'){
+      var areaObj = AREAS.filter(function(a){return a.id===estacao.area;})[0];
+      title.textContent = areaObj.sq+' '+areaObj.label;
+      var html2 = '<p class="section-lead">Nenhum bloco é obrigatório. Comece por onde quiser.</p><div class="block-list">';
+      BLOCKS.forEach(function(b){
+        var prev = state.quiz[estacao.area] && state.quiz[estacao.area][b.id];
+        html2 += '<div class="block-row" onclick="pickBlock(\''+b.id+'\')">'+
+          '<span class="sq">'+b.sq+'</span>'+
+          '<div><b>Bloco — '+b.label+'</b><span>'+(QUIZ_BANK[estacao.area][b.id].length)+' questões</span></div>'+
+          (prev ? '<span class="best">'+prev.pct+'%</span>' : '')+
+          '</div>';
+      });
+      html2 += '</div>';
+      body.innerHTML = html2;
+    } else if(estacao.view==='quiz'){
+      renderQuizQuestion();
+    } else if(estacao.view==='result'){
+      renderQuizResult();
+    }
+  }
+  window.pickArea = function(id){ estacao.area=id; estacao.view='block'; renderEstacao(); };
+  window.pickBlock = function(id){
+    estacao.block=id;
+    estacao.qIndex=0;
+    estacao.answers=[];
+    estacao.view='quiz';
+    renderEstacao();
+  };
+
+  function stopQuizTimer(){
+    if(estacao.timerHandle){ clearInterval(estacao.timerHandle); estacao.timerHandle=null; }
+  }
+  function renderQuizQuestion(){
+    stopQuizTimer();
+    var qs = QUIZ_BANK[estacao.area][estacao.block];
+    var q = qs[estacao.qIndex];
+    var title = document.getElementById('estacao-title');
+    var areaObj = AREAS.filter(function(a){return a.id===estacao.area;})[0];
+    title.textContent = areaObj.sq+' '+areaObj.label;
+    estacao.qStart = Date.now();
+    var html = '<div class="quiz-top"><div class="quiz-progress">Questão '+(estacao.qIndex+1)+' de '+qs.length+'</div>'+
+      '<div class="quiz-timer" id="quiz-clock">⏱️ 00:00</div></div>'+
+      '<div class="quiz-q">'+escapeHtml(q.q)+'</div>'+
+      '<div id="quiz-opts">';
+    var letters=['A','B','C','D'];
+    q.opts.forEach(function(opt,i){
+      html += '<button class="opt" onclick="answerQuiz('+i+')"><b>'+letters[i]+')</b>'+escapeHtml(opt)+'</button>';
+    });
+    html += '</div>';
+    document.getElementById('estacao-body').innerHTML = html;
+    estacao.timerHandle = setInterval(updateClock, 500);
+    updateClock();
+  }
+  function updateClock(){
+    var el = document.getElementById('quiz-clock');
+    if(!el) return;
+    var s = Math.floor((Date.now()-estacao.qStart)/1000);
+    el.textContent = '⏱️ '+pad2(Math.floor(s/60))+':'+pad2(s%60);
+  }
+  function pad2(n){ return (n<10?'0':'')+n; }
+
+  window.answerQuiz = function(choice){
+    stopQuizTimer();
+    var qs = QUIZ_BANK[estacao.area][estacao.block];
+    var q = qs[estacao.qIndex];
+    var correct = (choice===q.correct);
+    estacao.answers.push({choice:choice, correct:correct, time:Date.now()-estacao.qStart});
+    var opts = document.querySelectorAll('#quiz-opts .opt');
+    opts.forEach(function(b,i){
+      b.setAttribute('disabled','disabled');
+      if(i===q.correct) b.classList.add('correct');
+      else if(i===choice) b.classList.add('wrong');
+    });
+    setTimeout(function(){
+      if(estacao.qIndex < qs.length-1){
+        estacao.qIndex++;
+        renderQuizQuestion();
+      } else {
+        finishQuiz();
+      }
+    }, 750);
+  };
+
+  function finishQuiz(){
+    var correctCount = estacao.answers.filter(function(a){return a.correct;}).length;
+    var total = estacao.answers.length;
+    var pct = Math.round((correctCount/total)*100);
+    var totalTime = estacao.answers.reduce(function(s,a){return s+a.time;},0);
+    if(!state.quiz[estacao.area]) state.quiz[estacao.area] = {};
+    state.quiz[estacao.area][estacao.block] = {pct:pct, correct:correctCount, total:total, time:totalTime, date:Date.now()};
+    saveState();
+    estacao.lastResult = {pct:pct, correct:correctCount, total:total, time:totalTime};
+    estacao.view='result';
+    renderEstacao();
+  }
+
+  function renderQuizResult(){
+    var r = estacao.lastResult;
+    var areaObj = AREAS.filter(function(a){return a.id===estacao.area;})[0];
+    var blockObj = BLOCKS.filter(function(b){return b.id===estacao.block;})[0];
+    document.getElementById('estacao-title').textContent = 'Resultado';
+    var secs = Math.round(r.time/1000);
+    var msg = r.pct>=70 ? 'Você apresentou bom desempenho nas questões deste bloco.' :
+      'Algumas questões apresentaram dificuldade. Vale revisar os conteúdos relacionados a esta área.';
+    var html = '<p class="section-lead">'+areaObj.sq+' '+areaObj.label+' — Bloco '+blockObj.label+'</p>'+
+      '<div class="result-ring" style="--pct:'+r.pct+'"><div class="rv">'+r.pct+'%</div><div class="rl">acerto</div></div>'+
+      '<div class="result-meta"><span>✅ '+r.correct+' de '+r.total+'</span><span>⏱️ '+pad2(Math.floor(secs/60))+':'+pad2(secs%60)+'</span></div>'+
+      '<div class="card"><b style="color:var(--navy);">🔎 O que seu resultado mostra?</b><p style="margin-top:8px;">'+msg+'</p></div>'+
+      '<button class="btn btn-primary btn-block" onclick="estacao.view=\'block\';renderEstacao();" style="margin-top:6px;">Escolher outro bloco</button>'+
+      '<button class="btn btn-ghost btn-block" style="margin-top:10px;" onclick="showScreen(\'screen-home\')">Voltar para minha jornada</button>';
+    document.getElementById('estacao-body').innerHTML = html;
+  }
+
+  /* patch showScreen to init estacao */
+  var _origShowScreen = showScreen;
+  showScreen = function(id){
+    if(id==='screen-estacao') openEstacao();
+    _origShowScreen(id);
+  };
+  window.showScreen = showScreen;
+
+  /* ---------------- BAGAGEM ---------------- */
+  function renderBagagem(){
+    var grid = document.getElementById('bagagem-grid');
+    grid.innerHTML='';
+    BAGAGEM_ITEMS.forEach(function(item){
+      var seen = state.bagagemSeen.indexOf(item.id)>-1;
+      var div = document.createElement('div');
+      div.className='bag-item'+(seen?' seen':'');
+      div.innerHTML='<span class="ic">'+item.ic+'</span><b>'+item.label+'</b>';
+      div.onclick=function(it){ return function(){ showBagTip(it); }; }(item);
+      grid.appendChild(div);
+    });
+    document.getElementById('bagagem-tip').innerHTML='';
+  }
+  function showBagTip(item){
+    if(state.bagagemSeen.indexOf(item.id)===-1){ state.bagagemSeen.push(item.id); saveState(); }
+    renderBagagem();
+    document.getElementById('bagagem-tip').innerHTML = '<div class="tip-box"><b>'+item.ic+' '+item.label.toUpperCase()+'</b><p style="margin-top:6px;margin-bottom:0;">'+item.tip+'</p></div>';
+  }
+
+  /* ---------------- ESTRATEGIA ---------------- */
+  function renderEstrategia(){
+    var list = document.getElementById('estrategia-list');
+    list.innerHTML='';
+    STRATEGY_TOPICS.forEach(function(topic){
+      var div = document.createElement('div');
+      div.className='strat-card';
+      div.innerHTML='<b>'+topic.ic+' '+topic.label+'</b><div class="txt"><p style="margin:0;">'+topic.tip+'</p></div>';
+      div.onclick=function(t, el){ return function(){
+        var open = el.classList.contains('open');
+        list.querySelectorAll('.strat-card').forEach(function(c){c.classList.remove('open');});
+        if(!open){ el.classList.add('open'); }
+        if(state.estrategiaSeen.indexOf(t.id)===-1){ state.estrategiaSeen.push(t.id); saveState(); }
+      }; }(topic, div);
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------- CHECKLIST ---------------- */
+  function renderChecklist(){
+    var list = document.getElementById('checklist-list');
+    list.innerHTML='';
+    CHECKLIST_ITEMS.forEach(function(item){
+      var on = !!state.checklist[item.id];
+      var div = document.createElement('div');
+      div.className='check-row'+(on?' on':'');
+      div.innerHTML='<div class="box">✓</div><span>'+item.label+'</span>';
+      div.onclick=function(id){ return function(){
+        state.checklist[id] = !state.checklist[id];
+        saveState();
+        renderChecklist();
+      }; }(item.id);
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------- RESPIRACAO ---------------- */
+  var breath = {handle:null, phaseHandle:null, remaining:0};
+  function startBreathing(seconds){
+    stopBreathing();
+    breath.remaining = seconds;
+    document.querySelectorAll('.dur-btn').forEach(function(b){
+      b.classList.toggle('active', parseInt(b.getAttribute('data-s'),10)===seconds);
+    });
+    document.getElementById('breath-timer').style.display='block';
+    updateBreathTimer();
+    breath.handle = setInterval(function(){
+      breath.remaining--;
+      updateBreathTimer();
+      if(breath.remaining<=0){
+        stopBreathing(true);
+      }
+    },1000);
+    cyclePhase();
+  }
+  window.startBreathing = startBreathing;
+  function updateBreathTimer(){
+    var s = Math.max(0,breath.remaining);
+    document.getElementById('breath-timer').textContent = pad2(Math.floor(s/60))+':'+pad2(s%60);
+  }
+  function cyclePhase(){
+    var circle = document.getElementById('breath-circle');
+    var phases = [
+      {cls:'in', label:'Inspirar', ms:4000},
+      {cls:'hold', label:'Segurar', ms:3000},
+      {cls:'out', label:'Expirar', ms:4000}
+    ];
+    var i=0;
+    function step(){
+      if(breath.remaining<=0) return;
+      circle.className='breath-circle '+phases[i].cls;
+      circle.textContent=phases[i].label;
+      breath.phaseHandle = setTimeout(function(){
+        i=(i+1)%phases.length;
+        step();
+      }, phases[i].ms);
+    }
+    step();
+  }
+  function stopBreathing(completed){
+    if(breath.handle){ clearInterval(breath.handle); breath.handle=null; }
+    if(breath.phaseHandle){ clearTimeout(breath.phaseHandle); breath.phaseHandle=null; }
+    var circle = document.getElementById('breath-circle');
+    if(completed){
+      circle.className='breath-circle';
+      circle.textContent='Bem-feito 🌿';
+      state.respiracaoCount = (state.respiracaoCount||0)+1;
+      saveState();
+      document.querySelectorAll('.dur-btn').forEach(function(b){b.classList.remove('active');});
+      document.getElementById('breath-timer').style.display='none';
+    }
+  }
+
+  /* ---------------- CAMINHO ---------------- */
+  function renderCaminho(){
+    var list = document.getElementById('caminho-list');
+    var items = [];
+    items.push({ic:'🎯', label:'Meu Sonho', status: state.sonho ? 'concluído' : 'pendente', done: !!state.sonho});
+    var anyQuiz=false;
+    for(var a in state.quiz){
+      for(var b in state.quiz[a]){
+        anyQuiz=true;
+        var areaObj = AREAS.filter(function(x){return x.id===a;})[0];
+        var blockObj = BLOCKS.filter(function(x){return x.id===b;})[0];
+        items.push({ic:'🧠', label:areaObj.label+' — '+blockObj.label, status:state.quiz[a][b].pct+'%', done:true});
+      }
+    }
+    if(!anyQuiz) items.push({ic:'🧠', label:'Estação ENEM', status:'pendente', done:false});
+    items.push({ic:'😮\u200d💨', label:'Respiração', status: state.respiracaoCount>0 ? (state.respiracaoCount+'x realizada') : 'pendente', done: state.respiracaoCount>0});
+    items.push({ic:'🧳', label:'Minha Bagagem', status: state.bagagemSeen.length+'/'+BAGAGEM_ITEMS.length+' itens', done: state.bagagemSeen.length>0});
+    items.push({ic:'💡', label:'Estratégia ENEM', status: state.estrategiaSeen.length+'/'+STRATEGY_TOPICS.length+' tópicos', done: state.estrategiaSeen.length>0});
+    var checked = Object.keys(state.checklist).filter(function(k){return state.checklist[k];}).length;
+    items.push({ic:'📋', label:'O Que Levar', status: checked+'/'+CHECKLIST_ITEMS.length+' itens', done: checked>0});
+    items.push({ic:'❤️', label:'Meu Motivo', status: state.motivo ? 'registrado' : 'pendente', done: !!state.motivo});
+    items.push({ic:'🔮', label:'Meu Futuro', status: state.futuroCurso ? 'explorado' : 'pendente', done: !!state.futuroCurso});
+
+    list.innerHTML='';
+    items.forEach(function(it){
+      var div = document.createElement('div');
+      div.className='tl-item';
+      div.innerHTML='<div class="tl-dot'+(it.done?' done':'')+'">'+(it.done?'✓':it.ic)+'</div>'+
+        '<div class="tl-body"><b>'+it.label+'</b><span>'+it.status+'</span></div>';
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------- PASSAPORTE ---------------- */
+  function renderPassaporte(){
+    var grid = document.getElementById('passport-grid');
+    grid.innerHTML='';
+    EXPERIENCES.filter(function(e){return e.id!=='caminho' && e.id!=='passaporte';}).forEach(function(exp){
+      var got = isDone(exp.id);
+      var div = document.createElement('div');
+      div.className='stamp'+(got?' got':'');
+      div.innerHTML='<span class="ic">'+exp.icon+'</span><b>'+exp.title+'</b>';
+      grid.appendChild(div);
+    });
+  }
+
+  /* ---------------- FUTURO ---------------- */
+  function renderFuturoScreen(){
+    var input = document.getElementById('futuro-curso');
+    input.value = state.futuroCurso || '';
+    var datalist = document.getElementById('cursos-list');
+    datalist.innerHTML = Object.keys(FUTURE_MAP).map(function(k){
+      return '<option value="'+capitalize(k)+'">';
+    }).join('');
+    renderFuturoAreas();
+  }
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  function renderFuturoAreas(){
+    var curso = document.getElementById('futuro-curso').value.trim();
+    state.futuroCurso = curso;
+    saveState();
+    var box = document.getElementById('futuro-result');
+    if(!curso){ box.innerHTML=''; return; }
+    var key = curso.toLowerCase();
+    var areas = FUTURE_MAP[key];
+    if(areas){
+      box.innerHTML = '<div class="card"><b style="color:var(--navy);">'+escapeHtml(capitalize(key))+'</b>'+
+        '<p style="margin:8px 0 6px;">Algumas áreas de atuação:</p>'+
+        '<div class="chip-row">'+areas.map(function(a){return '<span class="area-tag">'+a+'</span>';}).join('')+'</div></div>';
+    } else {
+      box.innerHTML = '<div class="card"><p style="margin:0;">Em breve traremos mais informações sobre esse curso. Continue explorando suas possibilidades!</p></div>';
+    }
+  }
+  window.renderFuturoAreas = renderFuturoAreas;
+
+  /* ---------------- UTIL ---------------- */
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  /* ---------------- INIT ---------------- */
+  document.addEventListener('DOMContentLoaded', function(){
+    if(state.onboarded && state.selected.length===5){
+      showScreen('screen-home');
+    }
+  });
+})();
+</script>
+</body>
+</html>
